@@ -18,7 +18,7 @@ public:
 	/**
      *
      */
-    Matching(cv::Ptr<cv::DescriptorMatcher>   matcher   = cv::DescriptorMatcher::create(matcherName));
+    Matching(cv::FlannBasedMatcher matcher = cv::FlannBasedMatcher(new cv::flann::LshIndexParams(6,12,1), new cv::flann::SearchParams(50)));
 	~Matching();
 
     /**
@@ -42,14 +42,14 @@ private:
 	//テンプレート画像からPatternを作成
 	
 	/* マッチング（あらかじめtrainを実行） */
-	void match(cv::Mat queryDescriptors,cv::Ptr<cv::DescriptorMatcher>& matcher,std::vector<cv::DMatch>& matches);
+	void match(cv::Mat queryDescriptors, cv::FlannBasedMatcher& m_matcher,std::vector<cv::DMatch>& matches);
 
 private:
     
 	//画像セットの数
 	int dataSetSize;
 	//特徴集合に対するmatcher
-    cv::Ptr<cv::DescriptorMatcher> m_matcher;
+    cv::FlannBasedMatcher m_matcher;
 	//訓練特徴を格納するFeatures構造体
 	std::vector<Features> m_trainFeatures;
 	//クエリ画像中のマッチングしたデータ

@@ -1,6 +1,6 @@
 ﻿#include "Matching.h"
 
-Matching::Matching(cv::Ptr<cv::DescriptorMatcher> matcher)
+Matching::Matching(cv::FlannBasedMatcher matcher)
 	: m_matcher(matcher)
 {
 	std::cout << "open matching" << std::endl;
@@ -69,7 +69,7 @@ void Matching::train(const std::vector<Features> trainPatterns )
 {
 // API of cv::DescriptorMatcher is somewhat tricky
 	// First we clear old train data:
-	this->m_matcher->clear();
+	this->m_matcher.clear();
 
 	m_trainFeatures = trainPatterns;
 	this->dataSetSize = m_trainFeatures.size();
@@ -83,15 +83,15 @@ void Matching::train(const std::vector<Features> trainPatterns )
 		descriptors[i]= trainPatterns[i].descriptors.clone();
 	}
 
-	m_matcher->add(descriptors);
+	m_matcher.add(descriptors);
 	// After adding train data perform actual train:
-	m_matcher->train();
+	m_matcher.train();
 	
 }
 
 
 
-void Matching::match(cv::Mat queryDescriptors, cv::Ptr<cv::DescriptorMatcher>& m_matcher,std::vector<cv::DMatch>& matches)
+void Matching::match(cv::Mat queryDescriptors, cv::FlannBasedMatcher& m_matcher,std::vector<cv::DMatch>& matches)
 {
 	const float minRatio = 0.8f;
 	matches.clear();
@@ -102,7 +102,7 @@ void Matching::match(cv::Mat queryDescriptors, cv::Ptr<cv::DescriptorMatcher>& m
 	std::vector< std::vector<cv::DMatch>>  knnMatches;
 
 	// queryとmatcherに保存されている特徴量をknn構造体を用いて最近傍点を検索する.
-	m_matcher->knnMatch(queryDescriptors, knnMatches, 2);
+	m_matcher.knnMatch(queryDescriptors, knnMatches, 2);
 
 	//ratio test
 	for(int j = 0; j < knnMatches.size(); j++)
@@ -126,15 +126,15 @@ void Matching::match(cv::Mat queryDescriptors, cv::Ptr<cv::DescriptorMatcher>& m
 
 void Matching::getMatches(const Features queryFeatures,const Features trainFeatures, std::vector<cv::DMatch>& matches)
 {
-	cv::Ptr<cv::DescriptorMatcher>   matcher   = new cv::BFMatcher(cv::NORM_HAMMING, false);
-	matcher->clear();
+	cv::FlannBasedMatcher matcher = cv::FlannBasedMatcher(new cv::flann::LshIndexParams(6,12,1), new cv::flann::SearchParams(50));
+	matcher.clear();
 
 	std::vector<cv::Mat> descriptors(1);
     descriptors[0] = trainFeatures.descriptors.clone();
-	matcher->add(descriptors);
+	matcher.add(descriptors);
 	
 	// After adding train data perform actual train:
-	matcher->train();
+	matcher.train();
 	
 
 	// Get matches
