@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\PatternDetector">
+      <UniqueIdentifier>{2a893f6e-6d75-4b61-a0a8-2106d0ad4062}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\PatternDetector">
+      <UniqueIdentifier>{854b1c25-865d-4439-a5cc-c1101d023123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\TrackingObject">
+      <UniqueIdentifier>{6a91af4e-ed46-4244-a329-80aaf2a2ff3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\DataStructures">
+      <UniqueIdentifier>{58b2eac3-89a1-4dac-b898-c03cfa25d551}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ImageProcessingCPP.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternDetector\ExtractFeatures.cpp">
+      <Filter>ソース ファイル\PatternDetector</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternDetector\Maching.cpp">
+      <Filter>ソース ファイル\PatternDetector</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternDetector\PatternDetector.cpp">
+      <Filter>ソース ファイル\PatternDetector</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStructures\Pattern.cpp">
+      <Filter>ソース ファイル\DataStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStructures\GeometryTypes.cpp">
+      <Filter>ソース ファイル\DataStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackingObject\TrackingObject.cpp">
+      <Filter>ソース ファイル\TrackingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackingObject\CameraCalibration.cpp">
+      <Filter>ソース ファイル\TrackingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStructures\CONSTANT.cpp">
+      <Filter>ソース ファイル\DataStructures</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ImageProcessingCPP.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternDetector\PatternDetector.h">
+      <Filter>ヘッダー ファイル\PatternDetector</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternDetector\ExtractFeatures.h">
+      <Filter>ヘッダー ファイル\PatternDetector</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternDetector\Matching.h">
+      <Filter>ヘッダー ファイル\PatternDetector</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructures\Pattern.hpp">
+      <Filter>ソース ファイル\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructures\GeometryTypes.hpp">
+      <Filter>ソース ファイル\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructures\CONSTANT.h">
+      <Filter>ソース ファイル\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackingObject\TrackingObject.hpp">
+      <Filter>ソース ファイル\TrackingObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackingObject\CameraCalibration.hpp">
+      <Filter>ソース ファイル\TrackingObject</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
