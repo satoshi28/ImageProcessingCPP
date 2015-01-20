@@ -10,7 +10,8 @@ PatternDetector
 ::~PatternDetector
 ()
 {
-	
+	m_matching.~Matching();
+	extractor.~ExtractFeatures();
 }
 
 void PatternDetector::setFeatures(std::vector<Features>& trainFeatures)
@@ -25,8 +26,11 @@ int PatternDetector::findPattern(cv::Mat queryImage, std::vector<Features> train
 
 	//ˆ——p
 	// “Á’¥—Ê‚ğPattern‚É•Û‘¶
-	extractor.getFeatures(queryImage,queryFeatures);
+	bool isExtracted =  extractor.getFeatures(queryImage,queryFeatures);
 
+	//“Á’¥—Ê‚ª’Šo‚Å‚«‚È‚©‚Á‚½‚çI—¹
+	if(isExtracted == false)
+		return -1;
 	//
 	m_matching.train(trainPatterns);
 

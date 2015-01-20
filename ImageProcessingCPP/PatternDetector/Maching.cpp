@@ -8,6 +8,11 @@ Matching::Matching(cv::Ptr<cv::DescriptorMatcher> matcher)
 
 Matching::~Matching()
 {
+	//クエリ画像中のマッチングしたデータ
+	m_matcher.release();
+	m_trainFeatures.clear();
+	queryMatchingFeatures.descriptors.release();
+	queryMatchingFeatures.keypoints.clear();
 	std::cout << "close matching" << std::endl;
 }
 

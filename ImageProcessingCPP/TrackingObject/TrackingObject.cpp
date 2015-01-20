@@ -8,6 +8,8 @@ TrackingObject::TrackingObject()
 
 TrackingObject::~TrackingObject()
 {
+	extractor.~ExtractFeatures();
+	cv::destroyAllWindows();
 }
 
 
@@ -15,6 +17,9 @@ TrackingObject::~TrackingObject()
 
 void TrackingObject::buildPatternFromImage(const cv::Mat image)
 {
+	//新規に作成
+	Pattern pattern;
+	trackingPattern = pattern;
 
 	int numImages = 4;
     float step = sqrtf(2.0f);
@@ -54,11 +59,60 @@ void TrackingObject::buildPatternFromImage(const cv::Mat image)
 
 }
 
+void TrackingObject::buildPatternFromFeatures(const Features trackFeatures)
+{
+	//新規に作成
+	Pattern pattern;
+	trackingPattern = pattern;
+
+    float step = sqrtf(2.0f);
+
+	//点を囲む領域を取得
+    std::vector<cv::Point2f> points(trackFeatures.keypoints.size());
+	for (size_t i = 0; i < trackFeatures.keypoints.size(); i++)
+    {
+        points[i] = trackFeatures.keypoints[i].pt;
+    }
+	cv::Mat pointsMat = cv::Mat(points);
+	cv::Rect rect = cv::boundingRect(pointsMat);
+
+    // Store original image in pattern structure
+    trackingPattern.size = cv::Size(rect.width, rect.height);
+    
+    // Build 2d and 3d contours (3d contour lie in XY plane since it's planar)
+	trackingPattern.points2d.resize(4);
+    trackingPattern.points3d.resize(4);
+
+    // Image dimensions
+    const float w = rect.width;
+    const float h = rect.height;
+
+    // Normalized dimensions:
+    const float maxSize = std::max(w,h);
+    const float unitW = w / maxSize;
+    const float unitH = h / maxSize;
+
+    trackingPattern.points2d[0] = cv::Point2f(0,0);
+    trackingPattern.points2d[1] = cv::Point2f(w,0);
+    trackingPattern.points2d[2] = cv::Point2f(w,h);
+    trackingPattern.points2d[3] = cv::Point2f(0,h);
+
+    trackingPattern.points3d[0] = cv::Point3f(-unitW, -unitH, 0);
+    trackingPattern.points3d[1] = cv::Point3f( unitW, -unitH, 0);
+    trackingPattern.points3d[2] = cv::Point3f( unitW,  unitH, 0);
+    trackingPattern.points3d[3] = cv::Point3f(-unitW,  unitH, 0);
+
+	//要素のコピー
+	trackingPattern.features.descriptors = trackFeatures.descriptors.clone();
+	std::copy(trackFeatures.keypoints.begin(),trackFeatures.keypoints.end(), back_inserter(trackingPattern.features.keypoints) );
+}
+
+
 void TrackingObject::getTransformMatrix(cv::Mat queryImage, double* transformMatrix)
 {
 	int64 start = cv::getTickCount();
 
-	CameraCalibration calibration(526.58037684199849f, 524.65577209994706f, 318.41744018680112f, 202.96659047014398f);
+	CameraCalibration calibration(626.318420f, 629.552124f, 322.617615f, 298.039093f);
 	Matching matching;
 
 
@@ -132,6 +186,14 @@ void TrackingObject::getTransformMatrix(cv::Mat queryImage, double* transformMat
 		cv::perspectiveTransform(trackingPattern.points2d, info.points2d, m_roughHomography);
 		info.computePose(trackingPattern, calibration);
 		info.draw2dContour(queryImage, cv::Scalar(255,255,0));
+		cv::Point2f point = cv::Point2f(0, 0);
+		for (size_t i = 0; i < info.points2d.size(); i++)
+		{
+			point.x += info.points2d[i].x;
+			point.y += info.points2d[i].y;
+		}
+		point *= 1 / 4.0f;
+
 
 		for(int i = 0; i < matches.size(); i++)
 		{
@@ -149,7 +211,9 @@ void TrackingObject::getTransformMatrix(cv::Mat queryImage, double* transformMat
 		
 		//モデルビュー行列
 		Matrix44 glMatrix = info.pose3d.getMat44().getTransposed();
-		
+		glMatrix.data[3] = point.x;
+		glMatrix.data[7] = point.y;
+		cv::circle(queryImage, point, 10, cv::Scalar(0, 255, 255), -1, CV_FILLED);
 		//std::memcpy(transformMatrix, glMatrix.data, sizeof(glMatrix.data));
 		for(int i = 0; i < 16; i++)
 		{

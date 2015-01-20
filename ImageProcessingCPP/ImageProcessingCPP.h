@@ -7,6 +7,7 @@
 
 #include <opencv2\opencv.hpp>
 
+
 #include "PatternDetector\PatternDetector.h"
 #include "TrackingObject\TrackingObject.hpp"
 
@@ -17,6 +18,7 @@ extern "C" {
     TESTFUNCDLL_API void releaseCamera(void* camera);
     TESTFUNCDLL_API void getCameraTexture(void* camera, unsigned char* data, int width, int height);
 	TESTFUNCDLL_API bool setDescriptors(void* array, int id);
+	TESTFUNCDLL_API bool setKeypoints(void* array_px, void* array_py, int id);
 
 	TESTFUNCDLL_API int findObject();
 	TESTFUNCDLL_API void getTransfromMatrix(double* matrix);

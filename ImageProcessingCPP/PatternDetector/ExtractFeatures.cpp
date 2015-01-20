@@ -6,6 +6,8 @@ ExtractFeatures::ExtractFeatures()
 
 ExtractFeatures::~ExtractFeatures()
 {
+	m_detector.release();				//“Á’¥“_ŒŸoŠí
+	m_extractor.release();
 	std::cout << "close extarctor" << std::endl;
 }
 

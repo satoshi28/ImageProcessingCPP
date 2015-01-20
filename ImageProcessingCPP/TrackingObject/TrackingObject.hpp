@@ -15,6 +15,8 @@ public:
 
 	void buildPatternFromImage(const cv::Mat image);
 
+	void TrackingObject::buildPatternFromFeatures(const Features trackFeatures);
+
 	void getTransformMatrix(cv::Mat queryImage, double* matrix);
 
 private:
